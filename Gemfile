@@ -1,0 +1,11 @@
+source "http://rubygems.org"
+
+gem "json"
+gem "httpclient"
+gem "rake"
+gem "rspec", "1.3.0"
+gem "cucumber", "0.9.0"
+gem "gherkin", "2.2.4"
+gem "curb"
+gem "nokogiri"
+gem "nats"
