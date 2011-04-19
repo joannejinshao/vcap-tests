@@ -297,3 +297,87 @@ def calculate_service_list
   end
   @services_list = services_list
 end
+
+
+Given /^The appcloud instance has a set of available frameworks$/ do
+  calculate_frameworks_list
+  @frameworks_list.length.should > 1
+end
+
+Given /^The appcloud instance has a set of available runtimes$/ do
+  calculate_runtimes_list
+  pp @runtimes_list
+
+  @runtimes_list.length.should > 1
+end
+
+
+Given /^The foo framework is not supported on appcloud$/ do
+  @frameworks_list.include?('foo').should == false
+end
+
+Given /^The rails3 framework is supported on appcloud$/ do
+  @frameworks_list.include?('rails3').should == true
+end
+
+Given /^The node framework is supported on appcloud$/ do
+  @frameworks_list.include?('node').should == true
+end
+
+Given /^The spring framework is supported on appcloud$/ do
+  @frameworks_list.include?('spring').should == true
+end
+
+Given /^The grails framework is supported on appcloud$/ do
+  @frameworks_list.include?('grails').should == true
+end
+
+Given /^The sinatra framework is supported on appcloud$/ do
+  @frameworks_list.include?('sinatra').should == true
+end
+
+When /^I upload my foo-based ruby18 application it should fail$/ do
+  response = create_failed_app_with_runtime_and_framework ENV_TEST_APP, @token, 'ruby18', 'foo'
+  response.status.should == 400
+  content = JSON.parse(response.content)
+  content['code'].should == 300
+  content['description'].should == 'Invalid application description'
+end
+
+When /^I upload my sinatra ruby2010 application it should fail$/ do
+  response = create_failed_app_with_runtime_and_framework ENV_TEST_APP, @token, 'ruby2010', 'sinatra'
+  response.status.should == 400
+  content = JSON.parse(response.content)
+  content['code'].should == 300
+  content['description'].should == 'Invalid application description'
+end
+
+def create_failed_app_with_runtime_and_framework app, token, runtime, framework
+  appname = get_app_name app
+  delete_app app, token
+  url = create_uri appname
+  manifest = {
+    :name => "#{appname}",
+    :staging => {
+      :runtime => runtime,
+      :framework => framework
+    },
+    :resources=> {
+        :memory => @config[app]['memory'] || 64
+    },
+    :uris => [url],
+    :instances => "1",
+  }
+  response = @client.create_app_internal @droplets_uri, manifest, auth_hdr(token)
+end
+
+def calculate_frameworks_list
+  frameworks = get_frameworks @token
+
+  # flatten
+  frameworks_list = []
+  frameworks.each do |k, v|
+    frameworks_list << k
+  end
+  @frameworks_list = frameworks_list
+end

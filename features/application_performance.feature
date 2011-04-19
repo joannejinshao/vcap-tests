@@ -47,3 +47,14 @@ Feature: Measure various performance features of an application
         Then it should be started
         Then it should be bound to an atmos service
         And env_test's health_check entrypoint should return OK
+
+      Scenario: start application
+        Given The appcloud instance has a set of available frameworks
+        Given The foo framework is not supported on appcloud
+        Given The rails3 framework is supported on appcloud
+        Given The node framework is supported on appcloud
+        Given The spring framework is supported on appcloud
+        Given The grails framework is supported on appcloud
+        Given The sinatra framework is supported on appcloud
+        When I upload my foo-based ruby18 application it should fail
+        When I upload my sinatra ruby2010 application it should fail

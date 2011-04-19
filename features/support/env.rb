@@ -441,6 +441,12 @@ class AppCloudHelper
     services
   end
 
+  def get_frameworks token
+    response = HTTPClient.get "#{@base_uri}/info", nil, auth_hdr(token)
+    frameworks = JSON.parse(response.content)
+    frameworks['frameworks']
+  end
+
   def provision_db_service token
     name = "#{@namespace}#{@app || 'simple_db_app'}"
     service_manifest = {
