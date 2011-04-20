@@ -328,6 +328,19 @@ When /^I add a url to my application$/ do
   add_app_uri @app, @new_uri, @token
 end
 
+# Map & unmap application URIs
+When /^I add a url that differs only by case$/ do
+  app_info = get_app_status @app, @token
+  app_info.should_not == nil
+  uris = app_info['uris']
+  uris.length.should == 1
+  @original_uri = uris[0]
+  appname = get_app_name @app
+  @new_uri = create_uri "#{appname.swapcase}"
+  @new_uri.should_not == @original_uri
+  add_app_uri @app, @new_uri, @token
+end
+
 Then /^I should have (\d+) urls associated with my application$/ do |arg1|
   app_info = get_app_status @app, @token
   app_info.should_not == nil

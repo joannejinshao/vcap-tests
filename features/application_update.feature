@@ -26,6 +26,13 @@ Feature: Update an application on AppCloud
          And I should be able to access the application through the new url.
 
      @creates_simple_app
+     Scenario: add a second url that differs by case
+         When I add a url that differs only by case
+         Then I should have 1 urls associated with my application
+         And I should be able to access the application through the original url.
+         And I should be able to access the application through the new url.
+
+     @creates_simple_app
      Scenario: remove a url that the application responds to
          Given I have my application associated with '2' urls
          When I remove one of the urls associated with my application
