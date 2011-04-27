@@ -182,8 +182,7 @@ end
 Given /^I have built a simple Erlang application$/ do
   # Try to find an appropriate Erlang
   erlang_path = '/var/vcap/runtimes/erlang-R14B02/bin'
-  path_erl_v = `#{erlang_path}/erl -version 2>&1`.strip
-  unless path_erl_v =~ /.*5.7.4$/
+  unless File.exists?(erlang_path)
     pending "Not running Erlang test because the Erlang runtime is not installed"
   else
     Dir.chdir("#{@testapps_dir}/#{SIMPLE_ERLANG_APP}")
