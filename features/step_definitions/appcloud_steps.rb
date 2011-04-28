@@ -330,6 +330,7 @@ end
 
 # Map & unmap application URIs
 When /^I add a url that differs only by case$/ do
+  pending
   app_info = get_app_status @app, @token
   app_info.should_not == nil
   uris = app_info['uris']
