@@ -55,7 +55,7 @@ dbrails_broken_app:
 grails_app:
   framework: "grails/1.0"
   startup: "thin start"
-  memory: 256
+  memory: 512
 
 roo_app:
   framework: "spring_web/1.0"
