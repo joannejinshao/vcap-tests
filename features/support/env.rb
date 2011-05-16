@@ -35,7 +35,9 @@ ROO_APP = "roo_app"
 SIMPLE_ERLANG_APP = "mochiweb_test"
 
 After do
-  AppCloudHelper.instance.delete_user
+  # This used to delete the entire user, but that now require admin privs
+  # so it was removed.
+  AppCloudHelper.instance.cleanup
 end
 
 After("@creates_simple_app") do
@@ -162,7 +164,9 @@ class AppCloudHelper
     delete_app_internal(DBRAILS_BROKEN_APP)
     delete_app_internal(GRAILS_APP)
     delete_app_internal(ROO_APP)
-    delete_user
+    # This used to delete the entire user, but that now require admin privs
+    # so it was removed, as we the delete_user method.  See the git
+    # history if it needs to be revived.
   end
 
   def create_uri name
@@ -179,16 +183,6 @@ class AppCloudHelper
 
   alias :test_user :create_user
   alias :test_passwd :create_passwd
-
-  def delete_user
-    unless @registered_user && @last_login_token && @last_registered_user
-      if @last_registered_user
-        @client.delete_user_internal(@base_uri, @last_registered_user, auth_hdr(@last_login_token))
-      end
-      @last_login_token = nil
-      @last_registered_user = nil
-    end
-  end
 
   def get_registered_user
     @last_registered_user
