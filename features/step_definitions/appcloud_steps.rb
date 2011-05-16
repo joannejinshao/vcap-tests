@@ -16,6 +16,7 @@ end
 
 # Register
 Given /^I am a new user to AppCloud$/ do
+  pending "new user registration is temporarily disabled in the bvts"
   AppCloudHelper.instance.create_user
 end
 
@@ -352,7 +353,13 @@ end
 
 # Map & unmap application URIs
 When /^I add a url that differs only by case$/ do
-  pending
+  # While odd, this is allowed for a single user.  It should fail
+  # for similar urls, both in terms of the same case and mixed
+  # case across users.  These tests aren't setup for
+  # cross user testing at the moment.  For a single user we might
+  # merge these urls on the backend, but we don't for the moment,
+  # hence the 'pending' status below.
+  pending "the expected behavior of this test is under discussion"
   app_info = get_app_status @app, @token
   app_info.should_not == nil
   uris = app_info['uris']
